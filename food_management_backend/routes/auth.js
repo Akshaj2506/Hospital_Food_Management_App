@@ -48,7 +48,8 @@ router.post('/create',
             })
             const data = {
                staff: {
-                  id: createdStaff.id
+                  id: createdStaff.id,
+                  role : createdStaff.role
                }
             }
             // signing data with JWT
@@ -97,7 +98,8 @@ router.post("/login",
          // signing data with JWT
          const data = {
             staff: {
-               id: staff.id
+               id: staff.id,
+               role: staff.role
             }
          }
          const authToken = jwt.sign(data, JWT_SECRET);
