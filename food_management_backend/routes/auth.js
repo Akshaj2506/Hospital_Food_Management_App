@@ -3,18 +3,20 @@ const router = express.Router();
 const {body, validationResult} = require("express-validator")
 const bcryptjs = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const User = require("../models/User")
+const Staff = require("../models/Staff")
 const path = require("path")
-const fetchUser = require("../middleware/fetchUser")
+const fetchStaff = require("../middleware/fetchStaff")
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post('/create',
    [
+      body('name', "Name can not be empty").notEmpty(),
       body('email', "Wrong format of email entered").isEmail(),
       body('password', "Password is not as per specifications").equals("Password@2025"),
-      body('role', "Role should not be empty").isLength({min : 1}),
+      body('role', "Role should not be empty").isIn(["Manager", "Preparation", "Delivery"]),
+      body('location', "Location can not be empty").notEmpty()
    ]
    , async (req, res) => {
       // Checking for any sort of errors in the request, return errors
@@ -24,27 +26,29 @@ router.post('/create',
             errors: errors.array(),
          });
       } else {
-         // Checking if the user already exists
-         const user = await User.findOne({ email: req.body.email });
-         if (user) {
+         // Checking if the staff already exists
+         const staff = await Staff.findOne({ email: req.body.email });
+         if (staff) {
             return res.status(400).json({
-               error: "User already exists",
+               error: "Staff already exists",
                success: false
             });
          }
-         // Create user if no issues found
-         const { email, password, role } = req.body;
+         // Create staff if no issues found
+         const { name, email, password, role, location } = req.body;
          try {
             const salt = await bcryptjs.genSalt(10);
             const secPass = await bcryptjs.hash(password, salt);
-            const createdUser = await User.create({
-               email: email,
+            const createdStaff = await Staff.create({
+               name,
+               email,
                password: secPass,
-               role: role,
+               role,
+               location
             })
             const data = {
-               user: {
-                  id: createdUser.id
+               staff: {
+                  id: createdStaff.id
                }
             }
             // signing data with JWT
@@ -74,15 +78,15 @@ router.post("/login",
       }
       try {
          const { email, password } = req.body;
-         const user = await User.findOne({ email });
-         // Checking if the user already exists
-         if (!user) {
+         const staff = await Staff.findOne({ email });
+         // Checking if the staff already exists
+         if (!staff) {
             return res.status(400).json({
-               error: "User does not exist",
+               error: "Staff does not exist",
                success: false
             });
          }
-         const deHashedPassword = await bcryptjs.compare(password, user.password);
+         const deHashedPassword = await bcryptjs.compare(password, staff.password);
          // checking if the password is correct
          if (!deHashedPassword) {
             return res.status(400).json({
@@ -92,13 +96,12 @@ router.post("/login",
          }
          // signing data with JWT
          const data = {
-            user: {
-               id: user.id
+            staff: {
+               id: staff.id
             }
          }
          const authToken = jwt.sign(data, JWT_SECRET);
-         success = true;
-         res.json({ authToken, success });
+         res.json({ authToken, success : true });
       } catch (error) {
          console.error(error.message);
          res.status(403).json({
@@ -109,10 +112,10 @@ router.post("/login",
    }
 )
 
-router.post('/getuser', fetchUser, async (req, res) => {
-   const userID = req.user.id;
-   const user = await User.findById(userID).select("-password");
-   res.json(user);
+router.post('/getstaff', fetchStaff, async (req, res) => {
+   const staffID = req.staff.id;
+   const staff = await Staff.findById(staffID).select("-password");
+   res.json(staff);
 })
 
 module.exports = router

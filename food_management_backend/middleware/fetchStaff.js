@@ -1,14 +1,14 @@
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const fetchUser = (req, res, next) => {
+const fetchStaff = (req, res, next) => {
    try {
       const token = req.header("auth-token");
       if (!token) {
          res.status(500).json({ error: "Kindly use an authentic auth token" })
       }
       const data = jwt.verify(token, JWT_SECRET);
-      req.user = data.user;
+      req.staff = data.staff;
       next();
    } catch (error) {
       console.error(error.message);
@@ -16,4 +16,4 @@ const fetchUser = (req, res, next) => {
    }
 }
 
-module.exports = fetchUser;
+module.exports = fetchStaff;

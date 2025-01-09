@@ -47,8 +47,22 @@ const PatientSchema = new mongoose.Schema({
    emergencyContact: {
       type: String,
       required: true
-   }
-});
+   },
+   dietPlans: {
+      morningMealId: {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Meal'
+      },
+      eveningMealId: {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Meal' 
+      },
+      nightMealId: {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Meal' 
+      },
+   },
+}, { timestamps: true });
 
 // Export the Patient model
 const Patient = mongoose.model('patients', PatientSchema);

@@ -15,6 +15,7 @@ app.use(express.urlencoded({
 
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/patients", require("./routes/patients"));
+app.use("/api/meals", require("./routes/meals"));
 
 app.get('/', (req, res) => {
    res.send("Hospital Food Management Backend: RUNNING")
