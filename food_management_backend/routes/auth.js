@@ -120,4 +120,9 @@ router.post('/getstaff', fetchStaff, async (req, res) => {
    res.json(staff);
 })
 
+router.get("/getAllStaff", fetchStaff, async (req, res) => {
+   const staff = await Staff.find().select("-password");
+   res.json(staff);
+})
+
 module.exports = router
