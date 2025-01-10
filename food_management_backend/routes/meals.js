@@ -84,18 +84,22 @@ router.delete('/delete/:id', fetchStaff, async (req, res) => {
 });
 
 router.patch('/updateStatus/:id/', fetchStaff, [
-   body('preparationStatus', 'Invalid preparation status').optional().isIn(['Pending', 'Preparing', 'Prepared']),
-   body('deliveryStatus', 'Invalid delivery status').optional().isIn(['Pending', 'In Transit', 'Delivered']),
+   body('preparationStatus', 'Invalid preparation status').isIn(['Pending', 'Preparing', 'Prepared']),
+   body('deliveryStatus', 'Invalid delivery status').isIn(['Pending', 'In Transit', 'Delivered']),
 ], async (req, res) => {
    const errors = validationResult(req);
    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
    try {
+      if (req.body.preparationStatus != "Prepared" &&
+         (req.body.deliveryStatus == "In Transit" || req.body.deliveryStatus == "Delivered")) return res.status(400).json({
+            error : "Cannot change Delivery Status before Preparation is Completed"
+         })
       const updatedMeal = await Meal.findByIdAndUpdate(
          req.params.id,
          {
             preparationStatus: req.body.preparationStatus,
             deliveryStatus: (
-               req.body.preparationStatus == "Completed" && 
+               req.body.preparationStatus == "Prepared" && 
                (req.body.deliveryStatus == "In Transit" || req.body.deliveryStatus == "Delivered")) ? req.body.deliveryStatus : "Pending",
          },
          { new: true, runValidators: true }

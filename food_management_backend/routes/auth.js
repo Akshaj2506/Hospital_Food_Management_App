@@ -15,7 +15,7 @@ router.post('/create',
       body('name', "Name can not be empty").notEmpty(),
       body('email', "Wrong format of email entered").isEmail(),
       body('password', "Password is not as per specifications").equals("Password@2025"),
-      body('role', "Role should not be empty").isIn(["Manager", "Preparation", "Delivery"]),
+      body('role', "Role should not be empty").isIn(["Manager", "Pantry", "Delivery"]),
       body('location', "Location can not be empty").notEmpty()
    ]
    , async (req, res) => {
