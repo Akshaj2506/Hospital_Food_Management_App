@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: "https://hospital-food-management-ew3vgqxyq-akshajs-projects-570ba92a.vercel.app/api",
+        target: "https://hospital-food-management-api.vercel.app/api",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
