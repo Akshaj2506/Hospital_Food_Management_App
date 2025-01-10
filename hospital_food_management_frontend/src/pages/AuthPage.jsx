@@ -24,7 +24,7 @@ const AuthPage = () => {
    const handleSubmit = async (e) => {
       e.preventDefault()
       if (authType == "login") {
-         await fetch("http://localhost:5000/api/auth/login", {
+         await fetch("/api/auth/login", {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
@@ -35,7 +35,7 @@ const AuthPage = () => {
             .then(async (data) => {
                if (data.success) {
                   sessionStorage.setItem("auth-token", data.authToken);
-                  await fetch("http://localhost:5000/api/auth/getstaff", {
+                  await fetch("/api/auth/getstaff", {
                      method: "POST",
                      headers: {
                         "auth-token": (sessionStorage.getItem("auth-token") ? sessionStorage.getItem("auth-token") : ""),
@@ -52,7 +52,7 @@ const AuthPage = () => {
                }
             })
       } else if (authType == "signup") {
-         await fetch("http://localhost:5000/api/auth/create", {
+         await fetch("/api/auth/create", {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
@@ -63,7 +63,7 @@ const AuthPage = () => {
             .then(async (data) => {
                if (data.success) {
                   sessionStorage.setItem("auth-token", data.authToken);
-                  await fetch("http://localhost:5000/api/auth/getstaff", {
+                  await fetch("/api/auth/getstaff", {
                      method: "POST",
                      headers: {
                         "auth-token": (sessionStorage.getItem("auth-token") ? sessionStorage.getItem("auth-token") : ""),

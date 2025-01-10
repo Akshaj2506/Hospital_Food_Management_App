@@ -8,7 +8,7 @@ const ManagerDashboard = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const fetchStaffDetails = async () => {
-      await fetch("http://localhost:5000/api/auth/getAllStaff", {
+      await fetch("/api/auth/getAllStaff", {
         method: "GET",
         headers : {
           "auth-token": sessionStorage.getItem("auth-token") ? sessionStorage.getItem("auth-token") : ""
@@ -20,7 +20,7 @@ const ManagerDashboard = () => {
       })
     }
     const fetchPatientDetails = async () => {
-      await fetch("http://localhost:5000/api/patients/fetch", {
+      await fetch("/api/patients/fetch", {
         method: "GET",
         headers : {
           "auth-token": sessionStorage.getItem("auth-token") ? sessionStorage.getItem("auth-token") : ""
