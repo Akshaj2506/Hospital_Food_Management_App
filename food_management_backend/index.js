@@ -9,7 +9,7 @@ const PORT = process.env.BACK_PORT
 connectDB()
 app.use(express.json());
 app.use(cors({
-   origin: ["https://hospital-food-management-app.vercel.app/"],
+   origin: ["https://hospital-food-management-app.vercel.app"],
    methods : ["POST", "GET", "PUT", "DELETE", "PATCH"],
    credentials: true
 }));
