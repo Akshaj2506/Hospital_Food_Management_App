@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import PatientForm from "./PatientForm"
+import PatientMeal from "./PatientMeal"
 
 const Modal = ({ actionType }) => {
    const closeModal = () => {
@@ -22,13 +23,14 @@ const Modal = ({ actionType }) => {
                </div>
                <div id="modal-body" className="h-5/6 overflow-y-scroll">
                   {actionType.split("/")[0] === "View Patient" &&
-                     <>
-                        <PatientForm id={actionType.split("/")[1]} actionType="view" />
-                     </>}
+                     <PatientForm id={actionType.split("/")[1]} actionType="view" />
+                  }
                   {actionType.split("/")[0] === "Create Patient" &&
-                     <>
-                        <PatientForm id={""} actionType="create" />
-                     </>}
+                     <PatientForm id={""} actionType="create" />
+                  }
+                  {actionType.split("/")[0] === "Assign Meal" &&
+                     <PatientMeal id={actionType.split("/")[1]} />
+                  }
                </div>
             </div>
          </div>
