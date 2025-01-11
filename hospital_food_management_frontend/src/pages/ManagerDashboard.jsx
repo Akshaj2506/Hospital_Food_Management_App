@@ -6,7 +6,7 @@ import Modal from "../components/Modal";
 const ManagerDashboard = () => {
   const [staff, setStaff] = useState([]);
   const [patients, setPatients] = useState([]);
-  // const [actionType, setActionType] = useState("");
+  const [actionType, setActionType] = useState("");
   // const navigate = useNavigate();
   useEffect(() => {
     const fetchStaffDetails = async () => {
@@ -43,6 +43,21 @@ const ManagerDashboard = () => {
     document.getElementById("modal-bg-main").classList.add("flex")
     document.getElementById("modal-bg-main").classList.remove("hidden")
   }
+  const handleDelete = async (id) => {
+    const confirmation = confirm("Are you sure you want to delete this patient's data?")
+    if (confirmation) {
+      await fetch(`/api/patients/delete/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": sessionStorage.getItem("auth-token") || null
+        }
+      }).then(() => {
+        alert("Record deleted!");
+        window.reload()
+      })
+    }
+  }
   return (
     <>
       <main className="p-6 bg-gray-100 min-h-screen">
@@ -76,6 +91,8 @@ const ManagerDashboard = () => {
           {/* Left: Patient Details */}
           <div className="bg-white shadow-md p-4 rounded-lg">
             <h2 className="text-2xl font-bold mb-4 text-blue-600">Patient Details</h2>
+            <button type="button" className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onClick={() => {setActionType(`Create Patient/`); openModal()}}>New Patient</button> 
+            {(patients.length > 0) ?
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-blue-100">
@@ -88,20 +105,24 @@ const ManagerDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {patients.map((patient, index) => (
+                 {patients.map((patient, index) => (
                   <tr key={index} className="hover:bg-gray-50">
                     <td className="p-2 border">{patient.name}</td>
                     <td className="p-2 border">{patient.age}</td>
                     <td className="p-2 border">{patient.floorNumber}-{patient.roomNumber}{patient.bedNumber}</td>
                     <td className="p-2 border">{patient.gender}</td>
                     <td className="p-2 border">{patient.contactInfo}</td>
-                    <td className="p-2 border"><button type="button" className="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-500 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => openModal()}>View All</button>
-                      <button type="button" className="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900" onClick={() => openModal()}>Modify</button>
+                    <td className="p-2 border"><button type="button" className="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-500 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => {
+                      setActionType(`View Patient/${patient._id}`);
+                      openModal()
+                    }
+                    }>View All</button>
+                      <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 float-end" onClick={() => handleDelete(patient._id)}>Delete</button>
                     </td>
                   </tr>
                 ))}
               </tbody>
-            </table>
+              </table> : <span className="text-red-500 text-2xl">No Patients</span>}
           </div>
 
           {/* Right: Staff Details */}
@@ -131,7 +152,7 @@ const ManagerDashboard = () => {
           </div>
         </div>
       </main>
-      <Modal/>
+      <Modal actionType={actionType} />
     </>
   )
 }
