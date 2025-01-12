@@ -85,8 +85,8 @@ const AuthPage = () => {
    }
    return (
       <>
-         {authType == "login" && <div className="content-center min-h-screen">
-            <div className="flex m-auto min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-4 bg-gray-50 rounded-lg shadow dark:border w-1/4">
+         {authType == "login" && <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8">
+            <div className="w-full max-w-md space-y-8 shadow-md p-8 rounded-lg">
                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                   <h2 className=" text-center text-2xl/9 font-bold tracking-tight text-gray-900">
                      Login to your Staff account
