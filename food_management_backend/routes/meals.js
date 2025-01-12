@@ -6,6 +6,8 @@ const fetchStaff = require("../middleware/fetchStaff");
 
 router.post('/add', fetchStaff, [
    body('mealName', "Meal name can not be empty").notEmpty(),
+   body('patientName', "Patient name can not be empty").notEmpty(),
+   body('mealTiming', "Meal Timing can not be empty").notEmpty().isIn(["Morning","Evening","Night"]),
    body('ingredients', 'Ingredients must be an array with at least one item').isArray({ min: 1 }),
    body('instructions', "Instructions has to be in an array").optional().isArray(),
    body('preparationStatus', 'Invalid preparation status').optional().isIn(['Pending', 'Preparing', 'Prepared']),
@@ -46,6 +48,8 @@ router.get('/fetch/:id', fetchStaff, async (req, res) => {
 
 router.put('/update/:id', fetchStaff, [
    body('mealName','Meal name cannot be empty').optional().notEmpty(),
+   body('patientName', "Patient name can not be empty").notEmpty(),
+   body('mealTiming', "Meal Timing can not be empty").notEmpty().isIn(["Morning", "Evening", "Night"]),
    body('ingredients','Ingredients must be an array with at least one item').optional().isArray({ min: 1 }),
    body('instructions', "Instructions has to be in an array").optional().isArray(),
    body('preparationStatus', 'Invalid preparation status').optional().isIn(['Pending', 'In Progress', 'Completed']),
