@@ -7,6 +7,16 @@ const MealSchema = new mongoose.Schema({
       trim: true,
       unique: true
    },
+   patientName : {
+      type: String,
+      required: true,
+      trim: true,
+   },
+   mealTiming : {
+      type: String,
+      enum: ['Morning', 'Evening', 'Night'],
+      default: 'Morning',
+   },
    ingredients: { 
       type: [String],
       required: true,

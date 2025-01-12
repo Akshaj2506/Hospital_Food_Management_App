@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 const PatientForm = ({ id, actionType }) => {
    const [formData, setFormData] = useState({
       name: "",
-      diseases: [""],
-      allergies: [""],
+      diseases: [],
+      allergies: [],
       roomNumber: "",
       bedNumber: "",
       floorNumber: "",
@@ -28,8 +28,8 @@ const PatientForm = ({ id, actionType }) => {
             .then(data => {
                setFormData({
                   name: "",
-                  diseases: [""],
-                  allergies: [""],
+                  diseases: [],
+                  allergies: [],
                   roomNumber: "",
                   bedNumber: "",
                   floorNumber: "",
@@ -40,8 +40,8 @@ const PatientForm = ({ id, actionType }) => {
                })
                setFormData({
                   name: data.name || "",
-                  diseases: data.diseases || "",
-                  allergies: data.allergies || "",
+                  diseases: data.diseases || [],
+                  allergies: data.allergies || [],
                   roomNumber: data.roomNumber || "",
                   bedNumber: data.bedNumber || "",
                   floorNumber: data.floorNumber || "",
@@ -110,8 +110,8 @@ const PatientForm = ({ id, actionType }) => {
             .then(data => {
                setFormData({
                   name: "",
-                  diseases: [""],
-                  allergies: [""],
+                  diseases: [],
+                  allergies: [],
                   roomNumber: "",
                   bedNumber: "",
                   floorNumber: "",
@@ -122,8 +122,8 @@ const PatientForm = ({ id, actionType }) => {
                })
                setFormData({
                   name: data.name || "",
-                  diseases: data.diseases || "",
-                  allergies: data.allergies || "",
+                  diseases: data.diseases || [],
+                  allergies: data.allergies || [],
                   roomNumber: data.roomNumber || "",
                   bedNumber: data.bedNumber || "",
                   floorNumber: data.floorNumber || "",

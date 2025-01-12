@@ -133,7 +133,7 @@ const ManagerDashboard = () => {
                         }
                         }>View All</button>
                           <button type="button" className="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-2 me-2 mb-2 dark:focus:ring-yellow-900" onClick={() => {
-                            setActionType(`Assign Meal/${patient._id}`);
+                            setActionType(`Assign Meal/${patient._id}/${patient.name}`);
                             openModal()
                           }
                           }>Meal Info.</button>
@@ -192,6 +192,8 @@ const ManagerDashboard = () => {
                 {meals.map((meal, index) => (
                   <tr key={index} className="hover:bg-gray-50">
                     <td className="p-2 border">{meal.mealName}</td>
+                    <td className="p-2 border">{meal.patientName}</td>
+                    <td className="p-2 border">{meal.mealTiming}</td>
                     <td className="p-2 border">{meal.preparationStaff || "N/A"}</td>
                     <td className="p-2 border"><span className={(meal.preparationStatus === "Pending") && "text-yellow-700 bg-yellow-200 border-yellow-700 border font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 " || (meal.preparationStatus === "Preparing") && "text-blue-700 bg-blue-200 border-blue-700 border font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" || (meal.preparationStatus === "Prepared") && "text-green-700 bg-green-200 border-green-700 border font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"}>{meal.preparationStatus}</span></td>
                     <td className="p-2 border">{meal.deliveryPersonnel || "N/A"}</td>

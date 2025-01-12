@@ -29,7 +29,11 @@ const Modal = ({ actionType }) => {
                      <PatientForm id={""} actionType="create" />
                   }
                   {actionType.split("/")[0] === "Assign Meal" &&
-                     <PatientMeal id={actionType.split("/")[1]} />
+                     <PatientMeal 
+                     patient={{
+                        id : actionType.split("/")[1],
+                        name : actionType.split("/")[2]
+                     }}actionType="create"/>
                   }
                </div>
             </div>
