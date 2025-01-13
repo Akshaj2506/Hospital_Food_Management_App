@@ -26,18 +26,6 @@ router.post('/add', fetchStaff, [
    }
 });
 
-router.post("/addMany", fetchStaff,[
-   body("meals", "Meals have to be stored in an array with atleast one record").isArray({min: 1})
-], async(req,res) => {
-   const errors = validationResult(req);
-   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-   try {
-      Meal.insertMany(req.body.meals)
-   } catch (err) {
-      res.status(500).json({ error: err.message });
-   }
-})
-
 router.get('/fetch', fetchStaff, async (req, res) => {
    try {
       const meals = await Meal.find().populate('preparationStaff deliveryPersonnel');

@@ -44,7 +44,11 @@ const PatientMealForm = ({ patient, actionType }) => {
    const [action, setAction] = useState(actionType)
    const [view, setView] = useState("morning")
    const [staff, setStaff] = useState([])
-
+   const [dietPlan, setDietPlan] = useState({
+      morningMealId: "",
+      eveningMealId: "",
+      nightMealId: ""
+   })
    useEffect(() => {
       const fetchStaff = async () => {
          await fetch("/api/auth/getAllStaff", {
@@ -57,8 +61,24 @@ const PatientMealForm = ({ patient, actionType }) => {
             .then(res => res.json())
             .then(data => setStaff(data))
       }
+      const fetchPatientMealRecord = async () => {
+         await fetch(`/api/patients/fetch/${patient.id}`, {
+            method: "GET",
+            headers: {
+               "Content-Type": "application/json",
+               "auth-token": sessionStorage.getItem("auth-token") || ""
+            }
+         })
+            .then(res => res.json())
+            .then(data => setDietPlan({
+               morningMealId: data.dietPlan.morningMealId || "",
+               eveningMealId: data.dietPlan.eveningMealId || "",
+               nightMealId: data.dietPlan.morningMealId || ""
+            }))
+      }
       fetchStaff();
-   }, [])
+      if (action !== "create") fetchPatientMealRecord()
+   }, [patient.id, action])
 
    const handleChange = (e) => {
       const { name, value } = e.target;
@@ -135,19 +155,33 @@ const PatientMealForm = ({ patient, actionType }) => {
    const handleSubmit = async (e) => {
       e.preventDefault();
       if (action === "create") {
-         await fetch(`/api/meals/addMany`, {
+         let formData;
+         if (view === "morning") formData = morningData;
+         if (view === "evening") formData = eveningData;
+         if (view === "night") formData = nightData;
+         await fetch(`/api/meals/add`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
                "auth-token": sessionStorage.getItem("auth-token") || null
             },
-            body: JSON.stringify({
-               "meals" : [morningData, eveningData, nightData]
-            })
+            body: JSON.stringify(formData)
          })
             .then(res => res.json())
-            .then(() => {
-               setAction("view")
+            .then(async(data) => {
+               if (view === "morning") setDietPlan({...dietPlan, morningMealId : data.dietPlan.morningMealId});
+               if (view === "evening") setDietPlan({...dietPlan, eveningMealId : data.dietPlan.eveningMealId});
+               if (view === "night") setDietPlan({...dietPlan, nightMealId : data.dietPlan.nightMealId});
+
+               await fetch(`/api/patients/assignMeal/${patient.id}`, {
+                  method: "PATCH",
+                  headers : {
+                     "Content-Type" : "application/json",
+                     "auth-token": sessionStorage.getItem("auth-token") || null
+                  },
+                  body : JSON.stringify(dietPlan)
+               })
+               // setAction("view")
             })
       }
       // if (action === "update") {
@@ -336,10 +370,10 @@ const PatientMealForm = ({ patient, actionType }) => {
                   {(action === "view") && <div>
                      <label className="block font-normal">Delivery Status</label>
                      <select
-                        name="preparationStatus"
+                        name="deliveryStatus"
                         disabled={true}
                         onChange={handleChange}
-                        value={morningData.preparationStatus}
+                        value={morningData.deliveryStatus}
                         className="w-full p-2 border rounded"
                      >
                         <option value={"Pending"}>Pending</option>
@@ -360,7 +394,7 @@ const PatientMealForm = ({ patient, actionType }) => {
                   className="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
 
                >
-                  Create All Meals
+                  Create
                </button>}
             </form>
          </div>}
@@ -493,10 +527,10 @@ const PatientMealForm = ({ patient, actionType }) => {
                   {(action === "view") && <div>
                      <label className="block font-normal">Delivery Status</label>
                      <select
-                        name="preparationStatus"
+                        name="deliveryStatus"
                         disabled={true}
                         onChange={handleChange}
-                        value={eveningData.preparationStatus}
+                        value={eveningData.deliveryStatus}
                         className="w-full p-2 border rounded"
                      >
                         <option value={"Pending"}>Pending</option>
@@ -517,7 +551,7 @@ const PatientMealForm = ({ patient, actionType }) => {
                   className="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
 
                >
-                  Create All Meals
+                  Create
                </button>}
             </form>
          </div>}
@@ -650,10 +684,10 @@ const PatientMealForm = ({ patient, actionType }) => {
                   {(action === "view") && <div>
                      <label className="block font-normal">Delivery Status</label>
                      <select
-                        name="preparationStatus"
+                        name="deliveryStatus"
                         disabled={true}
                         onChange={handleChange}
-                        value={nightData.preparationStatus}
+                        value={nightData.deliveryStatus}
                         className="w-full p-2 border rounded"
                      >
                         <option value={"Pending"}>Pending</option>
@@ -674,7 +708,7 @@ const PatientMealForm = ({ patient, actionType }) => {
                   className="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
 
                >
-                  Create All Meals
+                  Create
                </button>}
             </form>
          </div>}

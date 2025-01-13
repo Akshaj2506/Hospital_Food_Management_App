@@ -148,7 +148,7 @@ const ManagerDashboard = () => {
           {/* Right: Staff Details */}
           <div className="bg-white shadow-md p-4 rounded-lg">
             <h2 className="text-2xl font-bold mb-4 text-blue-600">Staff Details</h2>
-            {(patients.length > 0) ?
+            {(staff.length > 0) ?
             <div className="overflow-y-scroll max-h-80">
               <table className="w-full text-center border-collapse">
                 <thead>
@@ -160,12 +160,12 @@ const ManagerDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {staff.map((staff, index) => (
+                  {staff.map((member, index) => (
                     <tr key={index} className="hover:bg-gray-50">
-                      <td className="p-2 border">{staff.name}</td>
-                      <td className="p-2 border">{staff.role}</td>
-                      <td className="p-2 border">{staff.email}</td>
-                      <td className="p-2 border">{(staff.role !== "Manager") ? <button type="button" className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Assign Meal</button> : ""}
+                      <td className="p-2 border">{member.name}</td>
+                      <td className="p-2 border">{member.role}</td>
+                      <td className="p-2 border">{member.email}</td>
+                      <td className="p-2 border">{(member.role !== "Manager") ? <button type="button" className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Assign Meal</button> : ""}
                       </td>
                     </tr>
                   ))}
@@ -180,7 +180,9 @@ const ManagerDashboard = () => {
             <table className="w-full text-center border-collapse">
               <thead>
                 <tr className="bg-blue-100">
-                  <th className="p-2 border">Name</th>
+                  <th className="p-2 border">Meal Name</th>
+                  <th className="p-2 border">Patient Name</th>
+                  <th className="p-2 border">Meal Timing</th>
                   <th className="p-2 border">Preparation Staff</th>
                   <th className="p-2 border">Preparation Status</th>
                   <th className="p-2 border">Delivery Personnel</th>
@@ -194,9 +196,9 @@ const ManagerDashboard = () => {
                     <td className="p-2 border">{meal.mealName}</td>
                     <td className="p-2 border">{meal.patientName}</td>
                     <td className="p-2 border">{meal.mealTiming}</td>
-                    <td className="p-2 border">{meal.preparationStaff || "N/A"}</td>
+                    <td className="p-2 border">{meal.preparationStaff.name || "N/A"}</td>
                     <td className="p-2 border"><span className={(meal.preparationStatus === "Pending") && "text-yellow-700 bg-yellow-200 border-yellow-700 border font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 " || (meal.preparationStatus === "Preparing") && "text-blue-700 bg-blue-200 border-blue-700 border font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" || (meal.preparationStatus === "Prepared") && "text-green-700 bg-green-200 border-green-700 border font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"}>{meal.preparationStatus}</span></td>
-                    <td className="p-2 border">{meal.deliveryPersonnel || "N/A"}</td>
+                    <td className="p-2 border">{meal.deliveryPersonnel.name || "N/A"}</td>
                     <td className="p-2 border"><span className={(meal.deliveryStatus === "Pending") && "text-yellow-700 bg-yellow-200 border-yellow-700 border font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 " || (meal.deliveryStatus === "In Transit") && "text-blue-700 bg-blue-200 border-blue-700 border font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" || (meal.preparationStatus === "Delivered") && "text-green-700 bg-green-200 border-green-700 border font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"}>{meal.deliveryStatus}</span></td>
                     <td className="p-2 border"><button type="button" className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Assign Staff</button>
                     </td>
