@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import PatientForm from "./PatientForm"
-import PatientMeal from "./PatientMeal"
+import PatientMealForm from "./PatientMealForm"
 
 const Modal = ({ actionType }) => {
    const closeModal = () => {
@@ -29,7 +29,7 @@ const Modal = ({ actionType }) => {
                      <PatientForm id={""} actionType="create" />
                   }
                   {actionType.split("/")[0] === "Assign Meal" &&
-                     <PatientMeal 
+                     <PatientMealForm 
                      patient={{
                         id : actionType.split("/")[1],
                         name : actionType.split("/")[2]
